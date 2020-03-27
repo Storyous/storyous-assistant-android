@@ -1,3 +1,4 @@
 rootProject.name='Storyous Assistant'
 include ':app'
 include ':design'
+include ':contacts'
