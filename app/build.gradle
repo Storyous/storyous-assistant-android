@@ -41,6 +41,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
     // Logging
     implementation "com.jakewharton.timber:timber:4.7.1"
+
+    // Code reader
+    implementation "me.dm7.barcodescanner:zxing:1.9.13"
+    
+    // Gson
+    implementation 'com.google.code.gson:gson:2.8.6'
 }

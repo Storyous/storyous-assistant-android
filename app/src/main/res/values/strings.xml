@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Storyous Assistant</string>
+    <string name="no_permissions_camera">Please, give us permission to use camera to read QR code.</string>
+    <string name="give_permission">Give permission</string>
+    <string name="remove_configuration">Remove configuration</string>
+    <string name="synchronize">Synchronize calls</string>
+    <string name="syncEnabledMessage">Synchronization of incoming call is now enabled.</string>
+    <string name="syncDisabledMessage">Synchronization of incoming call is now disabled.</string>
 </resources>
