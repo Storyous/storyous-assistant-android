@@ -3,44 +3,29 @@ package com.storyous.assistant
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 class ContactsViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val gson = Gson()
-    private val sharedPreferences = application.getSharedPreferences(
-        "contactSyncConfig",
-        Context.MODE_PRIVATE
+    private val repository = ContactsRepository(
+        application.getSharedPreferences("contactSyncConfig", Context.MODE_PRIVATE)
     )
-    private val configLive = MutableLiveData<Config>()
-    val isConfigured = Transformations.map(configLive) { it != null }
-    val syncEnabled = MutableLiveData(false)
+    val isConfigured: LiveData<Boolean> = repository.isConfigured
+    val syncEnabled: LiveData<Boolean> = repository.syncEnabled
 
     init {
         viewModelScope.launch {
-            configLive.value = getConfig()
+            repository.loadConfig()
         }
-    }
-
-    private fun getConfig(): Config? {
-        return sharedPreferences.getString("config", null)
-            ?.let { Gson().fromJson(it, Config::class.java) }
-    }
-
-    private fun storeConfig(config: Config?) {
-        sharedPreferences.edit().putString("config", gson.toJson(config)).apply()
-        configLive.value = config
     }
 
     fun onContactsConfigReceived(configJson: String) {
         viewModelScope.launch {
-            val config = gson.fromJson(configJson, Config::class.java)
+            val config = repository.parseConfig(configJson)
 
-            storeConfig(config)
+            repository.storeConfig(config)
             enableSync(config.token != null)
             if (config.token != null) {
                 // TODO start receiver to listen incoming calls
@@ -49,11 +34,11 @@ class ContactsViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun enableSync(enabled: Boolean) {
-        syncEnabled.value = enabled
+        repository.syncEnabled.value = enabled
     }
 
     fun deleteConfiguration() {
         enableSync(false)
-        storeConfig(null)
+        repository.storeConfig(null)
     }
 }
