@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
@@ -23,6 +22,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     companion object {
         const val MY_PERMISSIONS_REQUEST_CAMERA = 1
+        const val MY_PERMISSIONS_REQUEST_PHONE_STATE = 2
     }
 
     private lateinit var contactSyncLayoutSet: ConstraintSet
@@ -35,24 +35,38 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         content.scanner.setFormats(listOf(BarcodeFormat.QR_CODE))
         content.givePermission.setOnClickListener { askForCameraPermissions() }
         content.removeConfiguration.setOnClickListener { viewModel.deleteConfiguration() }
-        viewModel.syncEnabled.observe(this, Observer { enabled ->
-            content.synchronize.isChecked = enabled
-            content.configuredMessage.setText(
-                if (enabled) R.string.syncEnabledMessage else R.string.syncDisabledMessage
-            )
-        })
         content.synchronize.setOnCheckedChangeListener { _, isChecked ->
             viewModel.enableSync(isChecked)
         }
 
         contactSyncLayoutSet = ConstraintSet().apply { clone(content as ConstraintLayout) }
 
-        viewModel.isConfigured.observe(this, Observer { configured ->
-            updateView(configured, isCameraPermissionGranted())
+        viewModel.syncEnabledLive.observe(this, Observer { enabled ->
+            onSyncEnabledChanged(enabled)
         })
 
-        if (viewModel.isConfigured.value == false && !isCameraPermissionGranted()) {
+        viewModel.isConfiguredLive.observe(this, Observer { configured ->
+            updateView(configured, isCameraPermissionGranted())
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (!viewModel.isConfigured && !isCameraPermissionGranted()) {
             askForCameraPermissions()
+        }
+    }
+
+    private fun onSyncEnabledChanged(enabled: Boolean) {
+        if (enabled && !isReadPhoneStatePermissionGranted()) {
+            content.synchronize.isChecked = false
+            askForPhoneStatePermissions()
+        } else {
+            content.synchronize.isChecked = enabled
+            content.configuredMessage.setText(
+                if (enabled) R.string.syncEnabledMessage else R.string.syncDisabledMessage
+            )
         }
     }
 
@@ -64,7 +78,24 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         )
     }
 
+    private fun askForPhoneStatePermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG),
+            MY_PERMISSIONS_REQUEST_PHONE_STATE
+        )
+    }
+
     private fun updateView(configured: Boolean, cameraPermissionGranted: Boolean) {
+
+        if (configured) {
+            content.scanner.stopCamera()
+            content.scanner.stopCameraPreview()
+        } else {
+            content.scanner.resumeCameraPreview(this)
+            content.scanner.startCamera()
+        }
+
         contactSyncLayoutSet.setVisibility(
             R.id.configured,
             if (configured) View.VISIBLE else View.GONE
@@ -84,17 +115,13 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         contactSyncLayoutSet.applyTo(content as ConstraintLayout)
     }
 
-    override fun onResume() {
-        super.onResume()
-        content.scanner.setResultHandler(this)
-        content.scanner.startCamera()
+    private fun isCameraPermissionGranted(): Boolean {
+        return isPermissionGranted(Manifest.permission.CAMERA)
     }
 
-    private fun isCameraPermissionGranted(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
+    private fun isReadPhoneStatePermissionGranted(): Boolean {
+        return isPermissionGranted(Manifest.permission.READ_PHONE_STATE) &&
+                isPermissionGranted(Manifest.permission.READ_CALL_LOG)
     }
 
     override fun onPause() {
@@ -112,13 +139,17 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
+        val granted = grantResults.isNotEmpty() &&
+                grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+
         when (requestCode) {
             MY_PERMISSIONS_REQUEST_CAMERA -> {
                 // If request is cancelled, the result arrays are empty.
-                val granted = grantResults.isNotEmpty() &&
-                        grantResults[0] == PackageManager.PERMISSION_GRANTED
-                updateView(viewModel.isConfigured.value == true, granted)
-                return
+                updateView(viewModel.isConfiguredLive.value == true, granted)
+            }
+            MY_PERMISSIONS_REQUEST_PHONE_STATE -> {
+                // If request is cancelled, the result arrays are empty.
+                onSyncEnabledChanged(granted)
             }
         }
     }

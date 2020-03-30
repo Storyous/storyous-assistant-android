@@ -6,4 +6,5 @@
     <string name="synchronize">Synchronize calls</string>
     <string name="syncEnabledMessage">Synchronization of incoming call is now enabled.</string>
     <string name="syncDisabledMessage">Synchronization of incoming call is now disabled.</string>
+    <string name="notification_info">Sync running.</string>
 </resources>
