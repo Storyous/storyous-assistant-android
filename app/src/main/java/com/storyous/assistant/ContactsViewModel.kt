@@ -28,7 +28,7 @@ class ContactsViewModel(application: Application) : AndroidViewModel(application
                         Config(
                             qrCode.personId,
                             it.fields.token.stringValue,
-                            it.fields.validUntil.stringValue.toLong()
+                            it.fields.validUntil.integerValue
                         )
                     }
             }.getOrElse {

@@ -2,13 +2,17 @@ package com.storyous.assistant
 
 import java.util.Date
 
-data class Field(
+data class IntField(
+    val integerValue: Long
+)
+
+data class StringField(
     val stringValue: String
 )
 
 data class Fields(
-    val token: Field,
-    val validUntil: Field
+    val token: StringField,
+    val validUntil: IntField
 )
 
 data class AccessResponse(
