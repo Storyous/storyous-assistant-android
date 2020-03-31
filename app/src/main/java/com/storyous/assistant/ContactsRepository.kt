@@ -29,6 +29,10 @@ class ContactsRepository(private val sharedPreferences: SharedPreferences) {
         }
     }
 
+    suspend fun loadAccess(url: String): AccessResponse = withContext(Dispatchers.IO) {
+        firestoreApi.loadAccess(url)
+    }
+
     private suspend fun loadConfig(): Config? = withContext(Dispatchers.IO) {
         sharedPreferences.getString(SP_CONFIG_KEY, null)
             ?.let { gson.fromJson(it, Config::class.java) }
@@ -38,8 +42,8 @@ class ContactsRepository(private val sharedPreferences: SharedPreferences) {
         sharedPreferences.getBoolean(SP_SYNC_ENABLED_KEY, false)
     }
 
-    fun parseConfig(configJson: String): Config {
-        return gson.fromJson(configJson, Config::class.java)
+    fun parseQRCode(qrCodeValue: String): QRCode {
+        return gson.fromJson(qrCodeValue, QRCode::class.java)
     }
 
     fun storeConfig(config: Config?) {

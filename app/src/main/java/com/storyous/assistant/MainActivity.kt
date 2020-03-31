@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     }
 
     override fun handleResult(rawResult: Result) {
-        viewModel.onContactsConfigReceived(rawResult.text)
+        viewModel.onQRCodeReceived(rawResult.text)
         Toast.makeText(this, "scanned ${rawResult.text}", Toast.LENGTH_LONG).show()
     }
 
