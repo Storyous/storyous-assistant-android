@@ -23,6 +23,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
@@ -53,10 +58,15 @@ dependencies {
 
     // Code reader
     implementation "me.dm7.barcodescanner:zxing:1.9.13"
-    
+
     // Gson
     implementation 'com.google.code.gson:gson:2.8.6'
-    
+
     // Storyous design
     implementation project(":design")
+
+    // Retrofit & OkHttp
+    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+    implementation "com.squareup.okhttp3:logging-interceptor:3.12.10"
 }
