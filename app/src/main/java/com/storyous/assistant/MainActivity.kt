@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     companion object {
         const val MY_PERMISSIONS_REQUEST_CAMERA = 1
         const val MY_PERMISSIONS_REQUEST_PHONE_STATE = 2
+        const val ASPECT_TOLERANCE = 0.5f
     }
 
     private lateinit var contactSyncLayoutSet: ConstraintSet
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         setContentView(R.layout.activity_main)
 
         content.scanner.setFormats(listOf(BarcodeFormat.QR_CODE))
+        // this param will make your HUAWEI phone, Lenovo TAB4 10" works great!
+        content.scanner.setAspectTolerance(ASPECT_TOLERANCE)
         content.givePermission.setOnClickListener { askForCameraPermissions() }
         content.removeConfiguration.setOnClickListener { viewModel.deleteConfiguration() }
         content.synchronize.setOnCheckedChangeListener { _, isChecked ->
