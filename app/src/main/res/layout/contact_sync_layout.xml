@@ -4,12 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <me.dm7.barcodescanner.zxing.ZXingScannerView
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/scanner"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="40dp"
-        app:laserEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"

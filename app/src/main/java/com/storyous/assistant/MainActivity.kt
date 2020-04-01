@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -13,17 +12,17 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import com.google.zxing.BarcodeFormat
-import com.google.zxing.Result
+import com.journeyapps.barcodescanner.BarcodeCallback
+import com.journeyapps.barcodescanner.BarcodeResult
+import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.contact_sync_layout.view.*
-import me.dm7.barcodescanner.zxing.ZXingScannerView
 
-class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
+class MainActivity : AppCompatActivity(), BarcodeCallback {
 
     companion object {
         const val MY_PERMISSIONS_REQUEST_CAMERA = 1
         const val MY_PERMISSIONS_REQUEST_PHONE_STATE = 2
-        const val ASPECT_TOLERANCE = 0.5f
     }
 
     private lateinit var contactSyncLayoutSet: ConstraintSet
@@ -33,9 +32,6 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        content.scanner.setFormats(listOf(BarcodeFormat.QR_CODE))
-        // this param will make your HUAWEI phone, Lenovo TAB4 10" works great!
-        content.scanner.setAspectTolerance(ASPECT_TOLERANCE)
         content.givePermission.setOnClickListener { askForCameraPermissions() }
         content.removeConfiguration.setOnClickListener { viewModel.deleteConfiguration() }
         content.synchronize.setOnCheckedChangeListener { _, isChecked ->
@@ -51,14 +47,27 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         viewModel.isConfiguredLive.observe(this, Observer { configured ->
             updateView(configured, isCameraPermissionGranted())
         })
+
+        content.scanner.viewFinder.setLaserVisibility(false)
+        content.scanner.barcodeView.decoderFactory =
+            DefaultDecoderFactory(listOf(BarcodeFormat.QR_CODE))
+        content.scanner.initializeFromIntent(intent)
+        content.scanner.decodeContinuous(this)
     }
 
     override fun onResume() {
         super.onResume()
-
-        if (!viewModel.isConfigured && !isCameraPermissionGranted()) {
-            askForCameraPermissions()
+        if (!viewModel.isConfigured) {
+            if (!isCameraPermissionGranted()) {
+                askForCameraPermissions()
+            }
+            content.scanner.resume()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        content.scanner.pause()
     }
 
     private fun onSyncEnabledChanged(enabled: Boolean) {
@@ -92,11 +101,9 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     private fun updateView(configured: Boolean, cameraPermissionGranted: Boolean) {
 
         if (configured) {
-            content.scanner.stopCamera()
-            content.scanner.stopCameraPreview()
+            content.scanner.pause()
         } else {
-            content.scanner.resumeCameraPreview(this)
-            content.scanner.startCamera()
+            content.scanner.resume()
         }
 
         contactSyncLayoutSet.setVisibility(
@@ -127,16 +134,6 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
                 isPermissionGranted(Manifest.permission.READ_CALL_LOG)
     }
 
-    override fun onPause() {
-        super.onPause()
-        content.scanner.stopCamera()
-    }
-
-    override fun handleResult(rawResult: Result) {
-        viewModel.onQRCodeReceived(rawResult.text)
-        Toast.makeText(this, "scanned ${rawResult.text}", Toast.LENGTH_LONG).show()
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -155,5 +152,9 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
                 onSyncEnabledChanged(granted)
             }
         }
+    }
+
+    override fun barcodeResult(result: BarcodeResult) {
+        result.text?.also { viewModel.onQRCodeReceived(result.text) }
     }
 }
