@@ -1,0 +1,77 @@
+{
+  "project_info": {
+    "project_number": "294803087044",
+    "firebase_url": "https://storyous-pos.firebaseio.com",
+    "project_id": "storyous-pos",
+    "storage_bucket": "storyous-pos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294803087044:android:f2bf53ae2f98a670be7391",
+        "android_client_info": {
+          "package_name": "com.storyous.assistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294803087044-v2ej0i5h18v9n85b50tu6mhjspemt2ml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSJuerf1oiE5kkiK_VuYmOjkINKF1BJyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294803087044-v2ej0i5h18v9n85b50tu6mhjspemt2ml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294803087044:android:64de0af2e2182ece",
+        "android_client_info": {
+          "package_name": "com.storyous.storyouspay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294803087044-fbfphi6tipn6rgmnhu29ptbckso7bg5h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.storyous.storyouspay",
+            "certificate_hash": "77218a5f0e0e0995049b65f1944f35adb351ef08"
+          }
+        },
+        {
+          "client_id": "294803087044-v2ej0i5h18v9n85b50tu6mhjspemt2ml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSJuerf1oiE5kkiK_VuYmOjkINKF1BJyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294803087044-v2ej0i5h18v9n85b50tu6mhjspemt2ml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

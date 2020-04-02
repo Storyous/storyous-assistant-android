@@ -2,29 +2,26 @@ package com.storyous.assistant
 
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class ContactsRepository(private val sharedPreferences: SharedPreferences) {
+class CallSyncRepository(private val sharedPreferences: SharedPreferences) {
 
     companion object {
-        const val SP_CONFIG_KEY = "config"
+        const val SP_PERSON_ID_KEY = "personId"
         const val SP_SYNC_ENABLED_KEY = "syncEnabled"
     }
 
     private val gson = Gson()
-    val configLive = MutableLiveData<Config>()
-    val isConfiguredLive = Transformations.map(configLive) { it != null }
     val syncEnabledLive = MutableLiveData(false)
+    var personId: String? = null
 
     suspend fun initFromPersistence() {
-        val config = loadConfig()
-        val syncEnabled = loadSyncEnabled()
+        val syncEnabled = isSyncEnabled()
+        personId = getPersonId()
 
         withContext(Dispatchers.Main) {
-            configLive.value = config
             syncEnabledLive.value = syncEnabled
         }
     }
@@ -33,12 +30,11 @@ class ContactsRepository(private val sharedPreferences: SharedPreferences) {
         firestoreApi.loadAccess(url)
     }
 
-    private suspend fun loadConfig(): Config? = withContext(Dispatchers.IO) {
-        sharedPreferences.getString(SP_CONFIG_KEY, null)
-            ?.let { gson.fromJson(it, Config::class.java) }
+    private suspend fun getPersonId(): String? = withContext(Dispatchers.IO) {
+        sharedPreferences.getString(SP_PERSON_ID_KEY, null)
     }
 
-    private suspend fun loadSyncEnabled(): Boolean = withContext(Dispatchers.IO) {
+    private suspend fun isSyncEnabled(): Boolean = withContext(Dispatchers.IO) {
         sharedPreferences.getBoolean(SP_SYNC_ENABLED_KEY, false)
     }
 
@@ -46,9 +42,9 @@ class ContactsRepository(private val sharedPreferences: SharedPreferences) {
         return gson.fromJson(qrCodeValue, QRCode::class.java)
     }
 
-    fun storeConfig(config: Config?) {
-        sharedPreferences.edit().putString(SP_CONFIG_KEY, gson.toJson(config)).apply()
-        configLive.value = config
+    fun storePersonId(personId: String?) {
+        sharedPreferences.edit().putString(SP_PERSON_ID_KEY, personId).apply()
+        this.personId = personId
     }
 
     fun setSyncEnabled(enabled: Boolean) {

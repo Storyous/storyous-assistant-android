@@ -5,6 +5,8 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.google.firebase.FirebaseApp
+import com.storyous.contacts.ContactsManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -14,8 +16,9 @@ import kotlin.reflect.KClass
 
 class App : Application() {
 
-    val contactsRepository by lazy {
-        ContactsRepository(
+    val contactsManager by lazy { ContactsManager() }
+    val callSyncRepository by lazy {
+        CallSyncRepository(
             getSharedPreferences("contactSyncConfig", Context.MODE_PRIVATE)
         )
     }
@@ -23,15 +26,17 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
+        FirebaseApp.initializeApp(this)
+
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            contactsRepository.initFromPersistence()
+            callSyncRepository.initFromPersistence()
         }
 
-        contactsRepository.syncEnabledLive.observeForever { enabled ->
+        callSyncRepository.syncEnabledLive.observeForever { enabled ->
             runCatching {
                 if (enabled) {
                     startService(IncomingCallSyncService::class)
@@ -43,16 +48,18 @@ class App : Application() {
     }
 }
 
-fun Context.getContactsRepository(): ContactsRepository =
-    (this.applicationContext as App).contactsRepository
+fun Context.getCallSyncRepository(): CallSyncRepository =
+    (this.applicationContext as App).callSyncRepository
+
+fun Context.getContactsManager(): ContactsManager =
+    (this.applicationContext as App).contactsManager
 
 fun Context.startService(clazz: KClass<out Service>) {
-    with(Intent(this, clazz.java)) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(this)
-        } else {
-            startService(this)
-        }
+    val intent = Intent(this, clazz.java)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        startForegroundService(intent)
+    } else {
+        startService(intent)
     }
 }
 
