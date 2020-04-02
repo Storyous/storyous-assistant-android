@@ -8,18 +8,40 @@ import android.os.IBinder
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import androidx.core.app.NotificationCompat
+import com.storyous.contacts.IncomingCall
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class IncomingCallSyncService : Service() {
 
     private val phoneStateListener = object : PhoneStateListener() {
+        private val syncScope = CoroutineScope(Dispatchers.IO)
+        private val syncJob: Job? = null
 
         override fun onCallStateChanged(state: Int, incomingNumber: String) {
             super.onCallStateChanged(state, incomingNumber)
 
+            if (!getContactsManager().isAuthenticated()) {
+                stopSelf()
+                return
+            }
+
+            if (syncJob?.isActive == true) {
+                return
+            }
+
             if (state == TelephonyManager.CALL_STATE_RINGING) {
-                Timber.d("Incoming call: $incomingNumber")
-                getContactsRepository().onCallReceived(incomingNumber)
+                syncScope.launch {
+                    runCatching {
+                        getContactsManager().updateIncomingCalls(IncomingCall(incomingNumber))
+                        Timber.d("Logged incoming call: $incomingNumber")
+                    }.onFailure {
+                        Timber.e(it, "Failed log incoming call: $incomingNumber")
+                    }
+                }
             }
         }
     }

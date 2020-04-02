@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
     }
 
     private lateinit var contactSyncLayoutSet: ConstraintSet
-    private val viewModel by viewModels<ContactsViewModel>()
+    private val viewModel by viewModels<CallSyncViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +49,9 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
         })
 
         content.scanner.viewFinder.setLaserVisibility(false)
+        content.scanner.initializeFromIntent(intent)
         content.scanner.barcodeView.decoderFactory =
             DefaultDecoderFactory(listOf(BarcodeFormat.QR_CODE))
-        content.scanner.initializeFromIntent(intent)
         content.scanner.decodeContinuous(this)
     }
 
@@ -139,18 +139,13 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
+        // If request is cancelled, the result arrays are empty.
         val granted = grantResults.isNotEmpty() &&
                 grantResults.all { it == PackageManager.PERMISSION_GRANTED }
 
         when (requestCode) {
-            MY_PERMISSIONS_REQUEST_CAMERA -> {
-                // If request is cancelled, the result arrays are empty.
-                updateView(viewModel.isConfiguredLive.value == true, granted)
-            }
-            MY_PERMISSIONS_REQUEST_PHONE_STATE -> {
-                // If request is cancelled, the result arrays are empty.
-                onSyncEnabledChanged(granted)
-            }
+            MY_PERMISSIONS_REQUEST_CAMERA -> updateView(viewModel.isConfigured, granted)
+            MY_PERMISSIONS_REQUEST_PHONE_STATE -> onSyncEnabledChanged(granted)
         }
     }
 
