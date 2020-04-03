@@ -8,6 +8,9 @@ import android.text.style.LeadingMarginSpan
 import android.text.style.StyleSpan
 import android.widget.TextView
 
+private const val HEADER_OFFSET = 10
+private const val LIST_ITEM_OFFSET = 5
+
 fun SpannableStringBuilder.appendOrderedList(
     texts: Array<String>,
     firstItemIsHeader: Boolean = false
@@ -26,7 +29,7 @@ fun SpannableStringBuilder.appendOrderedList(
         contentStart = length
         appendln()
         setSpan(
-            AbsoluteSizeSpan(10, true),
+            AbsoluteSizeSpan(HEADER_OFFSET, true),
             contentStart,
             length,
             Spannable.SPAN_INCLUSIVE_EXCLUSIVE
@@ -38,7 +41,7 @@ fun SpannableStringBuilder.appendOrderedList(
             val contentStart = length
             appendln("${index + 1}. $s")
             setSpan(
-                LeadingMarginSpan.Standard(0, 5),
+                LeadingMarginSpan.Standard(0, LIST_ITEM_OFFSET),
                 contentStart,
                 length,
                 Spannable.SPAN_INCLUSIVE_EXCLUSIVE
