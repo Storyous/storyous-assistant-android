@@ -108,7 +108,11 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
     private fun askForPhoneStatePermissions() {
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_CALL_LOG),
+            arrayOf(
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_CALL_LOG,
+                Manifest.permission.INTERNET
+            ),
             MY_PERMISSIONS_REQUEST_PHONE_STATE
         )
     }
@@ -146,7 +150,8 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
 
     private fun isReadPhoneStatePermissionGranted(): Boolean {
         return isPermissionGranted(Manifest.permission.READ_PHONE_STATE) &&
-                isPermissionGranted(Manifest.permission.READ_CALL_LOG)
+                isPermissionGranted(Manifest.permission.READ_CALL_LOG) &&
+                isPermissionGranted(Manifest.permission.INTERNET)
     }
 
     override fun onRequestPermissionsResult(

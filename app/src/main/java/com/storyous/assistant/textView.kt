@@ -10,10 +10,10 @@ import android.widget.TextView
 
 fun SpannableStringBuilder.appendOrderedList(
     texts: Array<String>,
-    firstHeader: Boolean = false
+    firstItemIsHeader: Boolean = false
 ): SpannableStringBuilder {
 
-    if (firstHeader && texts.isNotEmpty()) {
+    if (firstItemIsHeader && texts.isNotEmpty()) {
         var contentStart = length
         appendln(texts[0])
         setSpan(
@@ -33,7 +33,7 @@ fun SpannableStringBuilder.appendOrderedList(
         )
     }
 
-    texts.filterIndexed { index, _ -> !firstHeader || index > 0 }
+    texts.filterIndexed { index, _ -> !firstItemIsHeader || index > 0 }
         .forEachIndexed { index, s ->
             val contentStart = length
             appendln("${index + 1}. $s")
@@ -50,7 +50,7 @@ fun SpannableStringBuilder.appendOrderedList(
 
 fun TextView.setOrderedListText(
     texts: Array<String>,
-    firstHeader: Boolean = false
+    firstItemIsHeader: Boolean = false
 ) {
-    text = SpannableStringBuilder().appendOrderedList(texts, firstHeader)
+    text = SpannableStringBuilder().appendOrderedList(texts, firstItemIsHeader)
 }
