@@ -32,6 +32,10 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        content.configInstructions.setOrderedListText(
+            resources.getStringArray(R.array.config_instructions),
+            true
+        )
         content.givePermission.setOnClickListener { askForCameraPermissions() }
         content.removeConfiguration.setOnClickListener { viewModel.deleteConfiguration() }
         content.synchronize.setOnCheckedChangeListener { _, isChecked ->
@@ -50,17 +54,23 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
 
         content.scanner.viewFinder.setLaserVisibility(false)
         content.scanner.initializeFromIntent(intent)
+        content.scanner.setStatusText("")
         content.scanner.barcodeView.decoderFactory =
             DefaultDecoderFactory(listOf(BarcodeFormat.QR_CODE))
         content.scanner.decodeContinuous(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+
+        if (!viewModel.isConfigured && !isCameraPermissionGranted()) {
+            askForCameraPermissions()
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         if (!viewModel.isConfigured) {
-            if (!isCameraPermissionGranted()) {
-                askForCameraPermissions()
-            }
             content.scanner.resume()
         }
     }
@@ -76,9 +86,14 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
             askForPhoneStatePermissions()
         } else {
             content.synchronize.isChecked = enabled
-            content.configuredMessage.setText(
-                if (enabled) R.string.syncEnabledMessage else R.string.syncDisabledMessage
-            )
+            if (enabled) {
+                content.configuredMessage.setOrderedListText(
+                    resources.getStringArray(R.array.create_order_instructions),
+                    true
+                )
+            } else {
+                content.configuredMessage.setText(R.string.syncDisabledMessage)
+            }
         }
     }
 
@@ -117,8 +132,8 @@ class MainActivity : AppCompatActivity(), BarcodeCallback {
         )
 
         contactSyncLayoutSet.setVisibility(
-            R.id.scanner,
-            if (!configured && cameraPermissionGranted) View.VISIBLE else View.INVISIBLE
+            R.id.configurate,
+            if (!configured) View.VISIBLE else View.INVISIBLE
         )
 
         TransitionManager.beginDelayedTransition(content as ConstraintLayout)
