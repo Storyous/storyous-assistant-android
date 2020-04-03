@@ -4,17 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/configurate"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:constraint_referenced_ids="configInstructions,scanner" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/configInstructions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        app:layout_constraintBottom_toTopOf="@+id/scanner"
+        app:layout_constraintEnd_toEndOf="@+id/scanner"
+        app:layout_constraintStart_toStartOf="@+id/scanner"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/scanner"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/configInstructions"
         app:layout_constraintWidth_max="300dp" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/noPermissions"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/no_permissions_background"
+        app:constraint_referenced_ids="noPermissionsCameraMessage,givePermission"
+        app:layout_constraintBottom_toBottomOf="@+id/scanner"
+        app:layout_constraintEnd_toEndOf="@+id/scanner"
+        app:layout_constraintStart_toStartOf="@+id/scanner"
+        app:layout_constraintTop_toTopOf="@+id/scanner" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/noPermissionsCameraMessage"
@@ -33,30 +64,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16dp"
-        android:text="@string/give_permission"
+        android:text="@string/give_camera_permission"
         app:layout_constraintBottom_toBottomOf="@+id/scanner"
         app:layout_constraintEnd_toEndOf="@+id/scanner"
         app:layout_constraintStart_toStartOf="@+id/scanner"
         app:layout_constraintTop_toBottomOf="@+id/noPermissionsCameraMessage" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/noPermissions"
+        android:id="@+id/configured"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
-        app:constraint_referenced_ids="noPermissionsCameraMessage,givePermission" />
+        android:visibility="visible"
+        app:constraint_referenced_ids="configuredMessage,synchronize,removeConfiguration" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/configuredMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/syncEnabledMessage"
+        android:text="@string/syncDisabledMessage"
         app:layout_constraintBottom_toTopOf="@+id/synchronize"
         app:layout_constraintEnd_toEndOf="@+id/scanner"
         app:layout_constraintStart_toStartOf="@+id/scanner"
-        app:layout_constraintTop_toTopOf="@+id/scanner"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/synchronize"
@@ -67,7 +96,9 @@
         app:layout_constraintBottom_toTopOf="@+id/removeConfiguration"
         app:layout_constraintEnd_toEndOf="@+id/scanner"
         app:layout_constraintStart_toStartOf="@+id/scanner"
-        app:layout_constraintTop_toBottomOf="@+id/configuredMessage" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/removeConfiguration"
@@ -75,15 +106,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16dp"
         android:text="@string/remove_configuration"
-        app:layout_constraintBottom_toBottomOf="@+id/scanner"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/scanner"
         app:layout_constraintStart_toStartOf="@+id/scanner"
         app:layout_constraintTop_toBottomOf="@+id/synchronize" />
-
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/configured"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="visible"
-        app:constraint_referenced_ids="configuredMessage,synchronize,removeConfiguration" />
 </androidx.constraintlayout.widget.ConstraintLayout>

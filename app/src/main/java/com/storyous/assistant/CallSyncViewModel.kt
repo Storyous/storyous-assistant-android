@@ -1,6 +1,7 @@
 package com.storyous.assistant
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +15,8 @@ class CallSyncViewModel(application: Application) : AndroidViewModel(application
     private val contactsManager = application.getContactsManager()
     private val repository = application.getCallSyncRepository()
     private var configuringJob: Job? = null
+    private val errorConfigToast =
+        Toast.makeText(getApplication(), R.string.config_error, Toast.LENGTH_SHORT)
 
     val isConfiguredLive = MutableLiveData(false)
     val isConfigured: Boolean
@@ -36,16 +39,21 @@ class CallSyncViewModel(application: Application) : AndroidViewModel(application
 
         configuringJob = viewModelScope.launch {
             val qrCode = repository.parseQRCode(qrCodeValue)
-            val config = runCatching {
+            runCatching {
                 qrCode.configUrl
                     ?.let { repository.loadAccess(it) }
                     ?.let { contactsManager.authenticate(it.fields.token.stringValue) }
             }.onFailure {
                 Timber.e(it, "Failed to configure app by QR")
-            }.getOrNull()
-
-            repository.storePersonId(qrCode.personId)
-            enableSync(config != null)
+                if (!errorConfigToast.view.isShown) {
+                    errorConfigToast.show()
+                }
+                enableSync(false)
+                repository.storePersonId(null)
+            }.onSuccess {
+                enableSync(true)
+                repository.storePersonId(qrCode.personId)
+            }
         }
     }
 

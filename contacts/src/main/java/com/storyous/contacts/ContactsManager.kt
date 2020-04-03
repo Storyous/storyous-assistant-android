@@ -2,7 +2,9 @@ package com.storyous.contacts
 
 import com.auth0.jwt.JWT
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import timber.log.Timber
 
@@ -51,13 +53,14 @@ class ContactsManager(
     }
 
     @Throws(IllegalArgumentException::class)
-    suspend fun updateIncomingCalls(incomingCall: IncomingCall): Unit = withTimeout(FIREBASE_TIMEOUT) {
-        repository.updateIncomingCalls(
-            requireNotNull(merchantId),
-            requireNotNull(placeId),
-            incomingCall
-        )
-    }
+    suspend fun updateIncomingCalls(incomingCall: IncomingCall): Unit =
+        withTimeout(FIREBASE_TIMEOUT) {
+            repository.updateIncomingCalls(
+                requireNotNull(merchantId),
+                requireNotNull(placeId),
+                incomingCall
+            )
+        }
 
     fun setAuthListener(listener: (Boolean) -> Unit) = firebaseAuth.addAuthStateListener {
         listener(it.currentUser != null)
@@ -68,20 +71,22 @@ class ContactsManager(
     fun isAuthenticated() = firebaseAuth.currentUser != null
 
     @Throws(IllegalStateException::class)
-    suspend fun authenticate(token: String): Boolean {
+    suspend fun authenticate(token: String) = withContext(Dispatchers.IO) {
         val (merchantId, placeId) = decodeToken(token)
 
-        return runCatching {
+        runCatching {
             firebaseAuth.signInWithCustomToken(token).await()
         }.onFailure {
-            this.merchantId = null
-            this.placeId = null
+            this@ContactsManager.merchantId = null
+            this@ContactsManager.placeId = null
             Timber.e(it, "Authorization fail. merchantId=$merchantId placeId=$placeId")
         }.onSuccess {
-            this.merchantId = merchantId
-            this.placeId = placeId
+            this@ContactsManager.merchantId = merchantId
+            this@ContactsManager.placeId = placeId
             Timber.d("Authorization success. merchantId=$merchantId placeId=$placeId")
-        }.isSuccess
+        }.getOrThrow()
+
+        Unit
     }
 
     @Throws(IllegalStateException::class)
