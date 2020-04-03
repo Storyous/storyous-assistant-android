@@ -18,6 +18,7 @@ import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.contact_sync_layout.view.*
 
+@Suppress("TooManyFunctions")
 class MainActivity : AppCompatActivity(), BarcodeCallback {
 
     companion object {

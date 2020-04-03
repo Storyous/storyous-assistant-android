@@ -51,8 +51,4 @@ class CallSyncRepository(private val sharedPreferences: SharedPreferences) {
         sharedPreferences.edit().putBoolean(SP_SYNC_ENABLED_KEY, enabled).apply()
         syncEnabledLive.value = enabled
     }
-
-    fun onCallReceived(incomingNumber: String) {
-        // TODO store incoming call to firestore
-    }
 }
