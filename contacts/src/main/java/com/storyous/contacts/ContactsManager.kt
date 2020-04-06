@@ -9,13 +9,13 @@ import kotlinx.coroutines.withTimeout
 import timber.log.Timber
 
 class ContactsManager(
-    private val repository: ContactsRepository = ContactsRepository()
+    private val repository: ContactsRepository = ContactsRepository(),
+    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 ) {
     companion object {
         const val FIREBASE_TIMEOUT = 20000L
     }
 
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private val autStateListener = FirebaseAuth.AuthStateListener {}
     private var merchantId: String? = null
     private var placeId: String? = null
@@ -35,7 +35,7 @@ class ContactsManager(
     }
 
     @Throws(IllegalArgumentException::class)
-    suspend fun getContacts(phoneNumber: String): List<Contact> = withTimeout(FIREBASE_TIMEOUT) {
+    suspend fun getContacts(phoneNumber: String) = withTimeout(FIREBASE_TIMEOUT) {
         repository.getContacts(
             requireNotNull(merchantId),
             requireNotNull(placeId),
@@ -44,7 +44,7 @@ class ContactsManager(
     }
 
     @Throws(IllegalArgumentException::class)
-    suspend fun updateContact(contact: Contact): Unit = withTimeout(FIREBASE_TIMEOUT) {
+    suspend fun updateContact(contact: Contact) = withTimeout(FIREBASE_TIMEOUT) {
         repository.updateContact(
             requireNotNull(merchantId),
             requireNotNull(placeId),
@@ -53,7 +53,7 @@ class ContactsManager(
     }
 
     @Throws(IllegalArgumentException::class)
-    suspend fun updateIncomingCalls(incomingCall: IncomingCall): Unit =
+    suspend fun updateIncomingCalls(incomingCall: IncomingCall) =
         withTimeout(FIREBASE_TIMEOUT) {
             repository.updateIncomingCalls(
                 requireNotNull(merchantId),
