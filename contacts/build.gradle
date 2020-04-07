@@ -45,5 +45,5 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // JWT
-    implementation 'com.auth0:java-jwt:3.10.2'
+    implementation 'com.auth0.android:jwtdecode:2.0.0'
 }

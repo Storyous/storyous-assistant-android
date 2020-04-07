@@ -1,6 +1,7 @@
 package com.storyous.contacts
 
-import com.auth0.jwt.JWT
+import com.auth0.android.jwt.DecodeException
+import com.auth0.android.jwt.JWT
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -89,14 +90,12 @@ class ContactsManager(
         Unit
     }
 
-    @Throws(IllegalStateException::class)
+    @Throws(IllegalStateException::class, DecodeException::class)
     private fun decodeToken(token: String): Pair<String, String> {
-        val decode = JWT.decode(token)
-        val claims: Map<String, Any>? = decode.getClaim("claims").asMap()
-        val merchantId = claims?.get("merchantId") as? String
-            ?: decode.getClaim("merchantId").asString()
-        val placeId = claims?.get("placeId") as? String
-            ?: decode.getClaim("placeId").asString()
+        val decode = JWT(token)
+        val claims: JWTClaims? = decode.getClaim("claims").asObject(JWTClaims::class.java)
+        val merchantId = claims?.merchantId ?: decode.getClaim("merchantId").asString()
+        val placeId = claims?.placeId ?: decode.getClaim("placeId").asString()
 
         if (merchantId == null || placeId == null) {
             throw IllegalStateException("Some of properties are null. merchantId=$merchantId placeId=$placeId")
