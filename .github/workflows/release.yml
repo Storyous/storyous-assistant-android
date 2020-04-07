@@ -24,10 +24,9 @@ jobs:
           alias: storyous
           keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+          signedReleaseFile: /app/build/outputs/apk/debug/app-release-signed.apk
       - name: Upload APK
         uses: actions/upload-artifact@v1
-        env:
-          SIGNED_RELEASE_FILE: ${{ env.SIGNED_RELEASE_FILE }}
         with:
           name: app
-          path: $SIGNED_RELEASE_FILE
+          path: /app/build/outputs/apk/debug/app-release-signed.apk
