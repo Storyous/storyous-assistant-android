@@ -20,6 +20,8 @@ class ContactsManagerTest {
 
     @Before
     fun setup() {
+        JWTWrapper.decoder = JWTDecoder()
+
         firestoreMock.clear()
 
         contactsManager = ContactsManager(
@@ -77,22 +79,22 @@ class ContactsManagerTest {
     fun failOnNonAuthenticated() = runBlocking {
         val contact = Contact("+420123456789", "John", "62-24 78th Street", "New York")
 
+        // Access to firestore is unauthorized. Request have to fail without modify contacts.
         Assert.assertTrue(
             runCatching { contactsManager.authenticate("corrupted_token") }.isFailure
         )
-
-        firestoreMock.nextException = IllegalStateException("Unaurthorized")
         Assert.assertTrue(
             runCatching { contactsManager.updateContact(contact) }.isFailure
         )
-        firestoreMock.nextException = null
+
+        // After authorization update contact have to success with updated contact.
+        contactsManager.authenticate(AUTH_TOKEN)
 
         val telNum = "+420"
         var contacts = contactsManager.getContacts(telNum)
 
         Assert.assertEquals(0, contacts.size)
 
-        contactsManager.authenticate(AUTH_TOKEN)
         contactsManager.updateContact(contact)
 
         contacts = contactsManager.getContacts(telNum)

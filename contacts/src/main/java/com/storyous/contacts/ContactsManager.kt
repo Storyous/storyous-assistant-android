@@ -1,7 +1,6 @@
 package com.storyous.contacts
 
 import com.auth0.android.jwt.DecodeException
-import com.auth0.android.jwt.JWT
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -24,10 +23,10 @@ class ContactsManager(
     init {
         runCatching {
             firebaseAuth.currentUser?.getIdToken(false)?.result?.token?.let {
-                val (merchantId, placeId) = decodeToken(it)
+                val claims = decodeToken(it)
 
-                this.merchantId = merchantId
-                this.placeId = placeId
+                merchantId = claims.merchantId
+                placeId = claims.placeId
                 Timber.d("App is authorized for merchantId=$merchantId placeId=$placeId.")
             }
         }.onFailure {
@@ -71,19 +70,18 @@ class ContactsManager(
 
     fun isAuthenticated() = firebaseAuth.currentUser != null
 
-    @Throws(IllegalStateException::class)
+    @Throws
     suspend fun authenticate(token: String) = withContext(Dispatchers.IO) {
-        val (merchantId, placeId) = decodeToken(token)
-
         runCatching {
             firebaseAuth.signInWithCustomToken(token).await()
+            decodeToken(token)
         }.onFailure {
             this@ContactsManager.merchantId = null
             this@ContactsManager.placeId = null
-            Timber.e(it, "Authorization fail. merchantId=$merchantId placeId=$placeId")
+            Timber.e(it, "Authorization fail. token=$token")
         }.onSuccess {
-            this@ContactsManager.merchantId = merchantId
-            this@ContactsManager.placeId = placeId
+            this@ContactsManager.merchantId = it.merchantId
+            this@ContactsManager.placeId = it.placeId
             Timber.d("Authorization success. merchantId=$merchantId placeId=$placeId")
         }.getOrThrow()
 
@@ -91,17 +89,10 @@ class ContactsManager(
     }
 
     @Throws(IllegalStateException::class, DecodeException::class)
-    private fun decodeToken(token: String): Pair<String, String> {
-        val decode = JWT(token)
-        val claims: JWTClaims? = decode.getClaim("claims").asObject(JWTClaims::class.java)
-        val merchantId = claims?.merchantId ?: decode.getClaim("merchantId").asString()
-        val placeId = claims?.placeId ?: decode.getClaim("placeId").asString()
-
-        if (merchantId == null || placeId == null) {
-            throw IllegalStateException("Some of properties are null. merchantId=$merchantId placeId=$placeId")
-        }
-
-        return merchantId to placeId
+    private fun decodeToken(token: String): JWTClaims {
+        return JWTWrapper.decode(token)
+            .takeIf { it.merchantId != null && it.placeId != null }
+            ?: throw IllegalStateException("JWT token not contains merchantId or placeId.")
     }
 
     fun signOut() {
