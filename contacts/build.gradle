@@ -34,6 +34,7 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
 
     // Firestore
     implementation 'com.google.firebase:firebase-firestore-ktx:21.4.2'
@@ -44,5 +45,6 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // JWT
-    implementation 'com.auth0:java-jwt:3.10.2'
+    implementation 'com.auth0.android:jwtdecode:2.0.0'
+    testImplementation 'com.auth0:java-jwt:3.10.2'
 }
