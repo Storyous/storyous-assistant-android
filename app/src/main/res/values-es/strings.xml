@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Asistente Storyous</string>
+    <string name="no_permissions_camera">La aplicación necesita utilizar la cámara para escanear el código QR mostrado en la TPV.</string>
+    <string name="give_camera_permission">Permitir acceso a la cámara</string>
+    <string name="remove_configuration">Cancelar la vinculación</string>
+    <string name="synchronize">Vincular los números de teléfono con la TPV</string>
+    <string name="notification_info">Las llamadas entrantes se están sincronizando con la TPV Storyous.</string>
+    <string name="config_error">Ha ocurrido un error en la configuración. Inténtalo más tarde por favor.</string>
+    ​
+    <string-array name="config_instructions">
+        <item>Vinculación de la aplicación con la TPV Storyous:</item>
+        <item>Vete al menú de la TPV Storyous a través de las tres barras en la esquina superior izquierda.</item>
+        <item>Elige la sección "Dispositivos".</item>
+        <item>Elige Asistente Storyous.</item>
+        <item>Utiliza esta aplicación para escanear el código QR que se te mostrará en la TPV.</item>
+    </string-array>
+    ​
+    <string-array name="create_order_instructions">
+        <item>Sincronización ha sido establecida. El número de teléfono, que te llamará a este número de teléfono, se puede sincronizar automáticamente con la TPV.</item>
+        <item>Al darle click a "Pedido rápido" se abrirá ventanilla para el pedido.</item>
+        <item>En la sección "Número de teléfono" elige el número de teléfono, que te está llamando ahora mismo.</item>
+        <item>Si ya has rellenado alguna vez los datos de contacto para este número, la TPV los rellenará ahora automáticamente. En caso contrario, una vez rellenados los datos, la TPV los guardará para los futuros pedidos.</item>
+        <item>La aplicación está activa en el fondo, no es necesario tenerla abierta para su funcionamiento correcto.</item>
+    </string-array>
+    ​
+    <string name="syncDisabledMessage">La sincronización ha sido desactivada, las llamadas entrantes no se sincronizarán con la TPV.</string>
+</resources>
