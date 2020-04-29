@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Storyous Assistant</string>
+    <string name="no_permissions_camera">Aplikacja musi użyć aparatu, aby jednorazowo odczytać kod QR z kasy.</string>
+    <string name="give_camera_permission">Zezwól na dostęp do aparatu</string>
+    <string name="remove_configuration">Wyłącz synchronizację kasy</string>
+    <string name="synchronize">Przepisuj numery telefonów do kasy</string>
+    <string name="notification_info">Twoje połączenia przychodzące są teraz synchronizowane z systemem sprzedażowym Storyous.</string>
+    <string name="config_error">Wystąpił błąd przy konfiguracji. Spróbuj ponownie później.</string>
+
+    <string-array name="config_instructions">
+        <item>Synchronizacja aplikacji z systemem sprzedażowym Storyous:</item>
+        <item>W systemie sprzedażowym Storyous otwórz menu za pomocą przycisku w lewym górnym rogu.</item>
+        <item>Otwórz sekcję „Urządzenia”.</item>
+        <item>Wybierz Storyous Assistant.</item>
+        <item>Pokaże się kod QR, który zeskanujesz tym urządzeniem.</item>
+    </string-array>
+
+    <string-array name="create_order_instructions">
+        <item>Synchronizacja jest włączona. Numer telefonu, z którego klient zadzwoni na ten telefon, będzie można zapisać bezpośrednio na kasie.</item>
+        <item>Przytrzymaj „Szybkie zamówienie”, aby otworzyć okno do wprowadzania zamówienia.</item>
+        <item>W sekcji „numer telefonu” wybierz numer, z którego klient właśnie do ciebie dzwoni.</item>
+        <item>Jeśli wcześniej wypełniałeś informacje dotyczące tego numeru, system doda je teraz automatycznie, w przeciwnym razie zapisane teraz informacje, będzie można użyć przy kolejnym zamówieniu.</item>
+        <item>Aplikacja działa w tle, nie musi być aktywna, aby działać poprawnie.</item>
+    </string-array>
+
+    <string name="syncDisabledMessage">Synchronizacja jest wyłączona, trwające teraz połączenia nie zostaną zapisane na kasie.</string>
+</resources>
