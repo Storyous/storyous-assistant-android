@@ -1,12 +1,12 @@
 <resources>
-    <string name="app_name">Storyous Assistant</string>
+    <string name="app_name">Storyous Assistent</string>
     <string name="no_permissions_camera">Aplikace potřebuje použít fotoaparát k jednorázovému načtení QR kódu z pokladny.</string>
     <string name="give_camera_permission">Povolit přístup ke fotoaparátu</string>
     <string name="remove_configuration">Odpárovat pokladnu</string>
     <string name="synchronize">Propisovat telefonní čísla do poklady</string>
     <string name="notification_info">Vaše příchozí hovory se nyní synchronizují do pokladního systému Storyous.</string>
     <string name="config_error">Nastala chyba při konfiguraci. Zkuste to prosím později.</string>
-
+    <string name="syncDisabledMessage">Synchronizace je vypnutá, do pokladny se nebudou propisovat právě probíhající hovory.</string>
     <string-array name="config_instructions">
         <item>Spárování aplikace s pokladním systémem Storyous:</item>
         <item>V pokladním systému Storyous otevřete menu pomocí tlačítka v levém horním rohu.</item>
@@ -14,7 +14,6 @@
         <item>Vyberte Storyous Assistant.</item>
         <item>Zobrazí se vám QR kód, který tímto zařízením načtěte.</item>
     </string-array>
-
     <string-array name="create_order_instructions">
         <item>Synchronizace je zapnutá. Telefonní číslo, které vám bude volat na tento telefon, lze načíst přímo z pokladny.</item>
         <item>Podržením na „Rychlá objednávka” otevřete okno pro zadání objednávky.</item>
@@ -22,6 +21,4 @@
         <item>Pokud jste už v minulosti k tomuto číslu předvyplnili ostatní informace, pokladní systém je nyní doplní automaticky, v opačném případě si informace uloží pro příští objednávku.</item>
         <item>Aplikace běží na pozadí, nemusíte ji tedy mít pro správnou funkci aktivní.</item>
     </string-array>
-
-    <string name="syncDisabledMessage">Synchronizace je vypnutá, do pokladny se nebudou propisovat právě probíhající hovory.</string>
 </resources>

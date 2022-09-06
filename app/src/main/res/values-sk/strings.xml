@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Storyous Assistant</string>
+    <string name="no_permissions_camera">Storyous Assistant vyžaduje použitie vašeho fotoaparátu za účelom skenovania QR kódu na spárovanie s vašou pokladňou.</string>
+    <string name="give_camera_permission">Povoliť prístup ku fotoaparátu</string>
+    <string name="remove_configuration">Odpárovať pokladňu</string>
+    <string name="synchronize">Synchronizovať informácie o hovoroch do pokladne</string>
+    <string name="notification_info">Vaše prichádzajúce hovory sú teraz synchronizované s pokladňou.</string>
+    <string name="config_error">Objavila sa chyba, prosím, skúste znova.</string>
+    <string name="syncDisabledMessage"> Synchornizácia je vypnutá, nové telefónne čísla nebudú poslané do pokladne</string>
+    <string-array name="config_instructions">
+        <item>Ako sprárovať Storyous Assistant s pokladňou</item>
+        <item>Choďte do Storyous pokladničnej aplikácie a otvorte ľavý stĺpec menu kliknutím na tri čiarky</item>
+        <item>Kliknite na "Zariadenia"</item>
+        <item>Kliknite na "Storyous Assistant"</item>
+        <item>Použite túto aplikáciu na nascannovanie QR kódu, ktorý sa ukazuje v pokladni</item>
+    </string-array>
+    <string-array name="create_order_instructions">
+        <item>Synchronizácia je povolená. Keď zákazník zavolá na tento telefón, jeho telefónne číslo bude zdieľané s pokladničnou aplikáciou.</item>
+        <item>Kliknite a podržte prst na "Na nový účet" tlačítku. Otvoria sa údaje o zákazníkovi pre objednávku.</item>
+        <item>Zvoľte telefónne číslo, ktoré vám aktuálne volá v odseku "Telefónne číslo"</item>
+        <item> Ostatné informácie o zákazníkovi si nájdeme a doplníme do formuláru, ak si zákazník už v minulosti niečo objednal. Ak je to jeho/jej prvá objednávka, jednoducho vyplňte voľné políčka formuláru a my údaje uložíme do budúcna. </item>
+        <item> Aplikácia beží na pozadí, nemusí byť teda aktívne zapnutá na obrazovke.</item>
+    </string-array>
+</resources>

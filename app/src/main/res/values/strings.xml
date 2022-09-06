@@ -6,7 +6,7 @@
     <string name="synchronize">Sync call informations to POS</string>
     <string name="notification_info">Your incoming phone calls are now being synced with POS.</string>
     <string name="config_error">An error occurred, please try again later.</string>
-
+    <string name="syncDisabledMessage">The synchronization is off, new phone call will not be transferred into the POS</string>
     <string-array name="config_instructions">
         <item>How to pair Storyous Assistant with POS</item>
         <item>Go to Storyous POS and open the left side menu clicking on the top left menu button</item>
@@ -14,7 +14,6 @@
         <item>Click on "Storyous Assistant"</item>
         <item>Use this app to scan the QR code that will be displayed in POS</item>
     </string-array>
-
     <string-array name="create_order_instructions">
         <item>Synchronization is enabled. When a customer calls you on this phone, his phone number will be shared with POS.</item>
         <item>Touch and hold "Quick order" button. Customer delivery info will be shown.</item>
@@ -22,6 +21,4 @@
         <item>We will fill in the rest of the information about the customer for you, if this customer ordered from you in the past. If it\'s his first order, simply fill in the remaining info and we will save it for next time.</item>
         <item>The app runs on the background, so it does not have to be active for it to work.</item>
     </string-array>
-
-    <string name="syncDisabledMessage">The synchronization is off, new phone call will not be transferred into the POS</string>
 </resources>

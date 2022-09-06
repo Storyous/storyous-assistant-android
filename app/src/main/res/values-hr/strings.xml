@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Storyous Assistant</string>
+    <string name="no_permissions_camera">Storyous Assistant zahtjeva koristenje kamere kako bi moga skenirati qr kodove.</string>
+    <string name="give_camera_permission">Dopusti pristup kameri</string>
+    <string name="remove_configuration">Odpari POS</string>
+    <string name="synchronize">Sinkroniziraj informacije sa POS</string>
+    <string name="notification_info">Vasi dolazni pozivi sad se sinkroniziraju sa pos uredjajem.</string>
+    <string name="config_error">Doslo je do grske molimo pokusajte ponovo kasnije.</string>
+    <string name="syncDisabledMessage">Sinkronizacija iskljucena, Novi pozivi nece biti preusmjereni na pos uredjaj</string>
+    <string-array name="config_instructions">
+        <item>Kako upariti Storyous asistenta sa Pos uredjajem</item>
+        <item>Odlaskom na storyous pos app u gornjem lijevom kutu pritisnite na menu</item>
+        <item>Click on "Uredjai"</item>
+        <item>Click on "Storyous Assistant"</item>
+        <item>Koristite ovu aplikaciju prilikom skeniranja qr kodova koji ce biti prikazani u pos-u</item>
+    </string-array>
+    <string-array name="create_order_instructions">
+        <item>Sinkronizacija omogucena. Kada Vas korisnik nazove na ovaj telefon, njegov broj biti ce podjeljen sa POS.</item>
+        <item>Pritisnut i drzatd "Brza narudzba" gumb. Informacije o dostavi biti ce prikazane.</item>
+        <item>Odaberite broj koji Vas sada zove u "Broj telefona" dijelu</item>
+        <item>Mi cemo ispuniti ostale podate od korisnika za vas ako je korisnik vec narucivao. Ako prvi puta narucuju, jednostavno ispunite ostale potrbne podatke a mi cemo ih spremiti za iduci put.</item>
+        <item>Aplikacija se vrti u pozadini, stoga nemora biti aktivna kako bi radila.</item>
+    </string-array>
+</resources>

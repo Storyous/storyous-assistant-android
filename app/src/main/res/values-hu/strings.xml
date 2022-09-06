@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Storyous Asszisztens</string>
+    <string name="no_permissions_camera">A POS-ról történő QR kód beolvasáshoz engedélyezned kell a kamerát a Storyous Asszisztensnek.</string>
+    <string name="give_camera_permission">Hozzáférés engedélyezése a kamerához</string>
+    <string name="remove_configuration">POS lecsatlakoztatása</string>
+    <string name="synchronize">Hívásinformációk szinkronizálása a POS-al</string>
+    <string name="notification_info">A bejövő hívásaid mostantól szinkronizálva lesznek a POS-al</string>
+    <string name="config_error">Valami hiba történt, kérjük, próbáld később újra.</string>
+    <string name="syncDisabledMessage">Szinkronizáció kikapcsolva, új telefonszámok már nem lesznek átküldve a POS-ra.</string>
+    <string-array name="config_instructions">
+        <item>Hogyan párosítsd a Storyous Asszisztenst a POS-al</item>
+        <item>Indítsd el a Storyous POS alkalmazást és nyisd meg a bal felső sarokban található menüt.</item>
+        <item>Kattints az "Eszközök" menüpontra</item>
+        <item>Kattints rá a Storyous Asszisztens-re</item>
+        <item>Használd ezt az alkalmazást hogy beszkenneld a QR kódot, ami megjelenik a POS-on</item>
+    </string-array>
+    <string-array name="create_order_instructions">
+        <item>Szinkronizáció engedélyezve. Ha egy ügyfél hív ezen a telefonon, a telefonszáma meg lesz osztva a POS-al.</item>
+        <item>Érintsd meg és tartsd nyomva a "Gyors rendelés" gombot. A kiszállítási cím és az ügyfél adatai meg fognak jelenni.</item>
+        <item>Válaszd ki a telefonszámot amiről épp hívnak a "Telefonszám" részben.</item>
+        <item>Mi kitöltjük a többi információt az ügyfélről, amennyiben volt már korábbi rendelése az ügyfélnek. Amennyiben ez az első rendelése, csak tölstd ki a fennmaradó mezőket, és mi elmentjük neked az infókat</item>
+        <item>Az alkalmazás a háttérben fut, így nem kell aktívnak lennie, hogy működni tudjon</item>
+    </string-array>
+</resources>
